@@ -61,5 +61,29 @@ print events
 
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
+import subprocess
+import sys
+import time
+#import matplotlib
+import dpkt
+timestamps=[]
+mtu=[]
+
+command = "sudo timeout 2 tcpdump -w packetinfo.pcap -i mtas_sig greater 1500"
+#command="sudo timeout 10 tcpdump -i enp0s3 greater 1500"
+P=subprocess.Popen(command.split(), stdout=subprocess.PIPE)
+linelist= P.stdout.readlines()
+time.sleep(10)
+
+f = open('packetinfo.pcap','rb')
+pcap = dpkt.pcap.Reader(f)
+
+for timestamp, buf in pcap:
+        ip = dpkt.ethernet.Ethernet(buf).data
+        tcp = ip.data
+        timestamps.append(timestamp)
+        mtu.append(len(tcp.data))
+print timestamps
+print mtu
 
 
