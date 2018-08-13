@@ -4,7 +4,7 @@ import time
 
 ssh = paramiko.SSHClient()
 ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-ssh.connect(hostname='134.138.212.12', username='ezpedvi', password='9505100403@usha')
+ssh.connect(hostname='134.138.212.12', username='ezpedvi', password='xxxxxxx')
 chan = ssh.invoke_shell()
 
 time.sleep(3)
@@ -33,9 +33,9 @@ opt4= chan.recv(9999)
 print opt4
 
 #file transfer from sc1- ez
-chan.send("scp -r /root/packets ezpedvi@134.138.212.12:/home/ezpedvi/packets\n")
+chan.send("scp -r /root/packets ezpedvi@1xxxxxxxx:/home/ezpedvi/packets\n")
 time.sleep(2)
-chan.send("9505100403@usha\n")
+chan.send("xxxxxxx\n")
 time.sleep(10)
 opt5=chan.recv(9999)
 print opt5
@@ -52,3 +52,4 @@ ssh.close()
 '''
 script to run commands over ssh channel and get the files, VM to ez to SC1 to PL3 sends back files exit sl3 sends back files to ez
 '''
+#timeout 3600 tcpdump -i eth0 greater 1500 -W 200 -C 600 -w /cluster/packets/packetinfo
