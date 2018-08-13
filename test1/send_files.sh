@@ -10,3 +10,4 @@ done
 cd ..
 
 #send files from PL-3 to SC-1: remember to write tcpdump output to a folder ex:packets
+#make sure that SC-1 has an empty folder named packets
