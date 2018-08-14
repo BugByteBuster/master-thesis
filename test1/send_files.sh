@@ -25,3 +25,6 @@ done
 cd ..
 echo "completed"
 
+
+nohup timeout 43200 tcpdump -i eth0 greater 1500 -W 5000 -C 600 -w /cluster/packets/packetinfo >/dev/null 2>&1
+
