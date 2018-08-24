@@ -1,0 +1,6 @@
+ssh.py is to run send_files.sh files in a remote machine (PL-3) and send_files.sh sends the catched pacap files from PL-3 to the common 
+shared memory. (change the paths accordingly).
+
+graph_xlsx is the script which seperates the traffic of different protocols on the pacap files, writes the results to excel sheet and plots
+the graph out of it.
+
