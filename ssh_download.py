@@ -1,13 +1,10 @@
 # -*- coding: utf-8 -*-
 import paramiko
 
-
-
 ssh_client=paramiko.SSHClient()
 ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 connection=ssh_client.connect(hostname="192.168.xx.xx",username="ezpedvi",password="***********")
 print connection
-
 
 stdin,stdout,stderr=ssh_client.exec_command("ls")
 print(stdout.readlines())
