@@ -102,7 +102,7 @@ for i in range(0, 5000):
     	#file transfer from sc1- ez
     	chan.send("scp -r /dev/packets/* ezpedvi@134.138.212.12:/home/ezpedvi/packets/\n")
     	time.sleep(2)
-    	chan.send("9505100403@usha\n")
+    	chan.send("*************\n")
     	print tend-tstart
     	time.sleep(tend-tstart)
     	chan.send("wait\n")
