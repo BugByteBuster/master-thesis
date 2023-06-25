@@ -4,7 +4,7 @@ import time
 import re
 ssh = paramiko.SSHClient()
 ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-ssh.connect(hostname='134.138.212.12', username='ezpedvi', password='9505100403@usha')
+ssh.connect(hostname='134.138.212.12', username='ezpedvi', password='xxxxxxxx')
 
 chan = ssh.invoke_shell()
 
@@ -23,7 +23,7 @@ for i in range(0, 5000):
         	resp = chan.recv(9999)
 		print resp
 		if "password:" in resp:
-                	chan.send("9505100403@usha\n")
+                	chan.send("xxxxxxxxxx\n")
 		if "SC-1:" in resp:
 			break
         chan.send("exit\n")
