@@ -4,7 +4,7 @@ import time
 import re
 ssh = paramiko.SSHClient()
 ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-ssh.connect(hostname='134.138.212.12', username='ezpedvi', password='xxxxxxxx')
+ssh.connect(hostname='x.x.x.x', username='ezpedvi', password='xxxxxxxx')
 
 chan = ssh.invoke_shell()
 
