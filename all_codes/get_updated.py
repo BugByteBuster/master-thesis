@@ -1,32 +1,43 @@
-# -*- coding: utf-8 -*-
 import paramiko
 import time
-import re
-ssh = paramiko.SSHClient()
-ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-ssh.connect(hostname='134.138.212.12', username='ezpedvi', password='9505100403@usha')
 
-chan = ssh.invoke_shell()
+def establish_ssh_connection(hostname, username, password):
+    ssh = paramiko.SSHClient()
+    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    ssh.connect(hostname=hostname, username=username, password=password)
+    return ssh
 
-for i in range(0, 5000):
-	print "fetching files for the {}st time".format(i)
-	command = chan.send("ssh root@10.80.100.101\n")
-	time.sleep(5)
-    	opt = chan.recv(9999)
-    	print "opt{}".format(opt)
-    	chan.send("rootroot\n")
-    	time.sleep(3)
-    	opt2 = chan.recv(9999)
-    	print opt2
-	chan.send("/cluster/./send_files.sh\n")
+def execute_command(ssh, command, sleep_time=0):
+    chan = ssh.invoke_shell()
+    chan.send(command + '\n')
+    time.sleep(sleep_time)
+    return chan.recv(9999)
+
+def close_ssh_connection(ssh):
+    ssh.close()
+
+def fetch_files():
+    ssh = establish_ssh_connection('134.138.212.12', 'ezpedvi', '9505100403@usha')
+    chan = ssh.invoke_shell()
+
+    for i in range(0, 5000):
+        print("fetching files for the {}st time".format(i))
+        execute_command(chan, "ssh root@10.80.100.101", 5)
+        opt = execute_command(chan, "", 3)
+        print("opt{}".format(opt))
+        execute_command(chan, "rootroot", 3)
+        opt2 = execute_command(chan, "", 3)
+        print(opt2)
+        execute_command(chan, "/cluster/./send_files.sh")
         while True:
-        	resp = chan.recv(9999)
-		print resp
-		if "password:" in resp:
-                	chan.send("9505100403@usha\n")
-		if "SC-1:" in resp:
-			break
-        chan.send("exit\n")
-        time.sleep(3)
-        opt = chan.recv(9999)
-ssh.close()
+            resp = execute_command(chan, "", 0)
+            print(resp)
+            if "password:" in resp:
+                execute_command(chan, "9505100403@usha")
+            if "SC-1:" in resp:
+                break
+        execute_command(chan, "exit", 3)
+
+    close_ssh_connection(ssh)
+
+fetch_files()
