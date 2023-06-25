@@ -1,55 +1,57 @@
-
-import numpy
+import numpy as np
 import os
 import dpkt
-import matplotlib as plt
+import matplotlib.pyplot as plt
 import datetime
 import collections
 
-timestamps=[]
-mtu=[]
+def read_packets(directory):
+    timestamps = []
+    mtu = []
 
-for filename in os.listdir('/home/ezpedvi/packets'):
-    if filename.startswith('packet'):
-        print (filename)
-        with open(os.path.join('/home/ezpedvi/packets', filename)) as f:
- 	    pcap = dpkt.pcap.Reader(f)
-            for timestamp, buf in pcap:
-                ip = dpkt.ethernet.Ethernet(buf).data
-        	#tcp = ip.data
-           	time=datetime.datetime.fromtimestamp(int(timestamp)).strftime('%H')
-             	timestamps.append(time)
-        	mtu.append(len(dpkt.ethernet.Ethernet(buf)))
-print ("length of timestamps {}".format(len(timestamps)))
-print ("lenght of mtus{}".format(len(mtu))) #count of total packets received
-#print ("mtu {} ". format(mtu))
-#print mtu (print length of all the received packets)
-#these many packets received in this hour
-print (collections.Counter(timestamps))
-#print counter
+    for filename in os.listdir(directory):
+        if filename.startswith('packet'):
+            print(filename)
+            with open(os.path.join(directory, filename)) as f:
+                pcap = dpkt.pcap.Reader(f)
+                for timestamp, buf in pcap:
+                    ip = dpkt.ethernet.Ethernet(buf).data
+                    time = datetime.datetime.fromtimestamp(int(timestamp)).strftime('%H')
+                    timestamps.append(time)
+                    mtu.append(len(dpkt.ethernet.Ethernet(buf)))
+    
+    return timestamps, mtu
 
-#frequency of packets with length greater than 1500 and range between 1500 - 6500
-counts, bins = numpy.histogram(mtu, bins=10, range=(1500, 6500))
-print ("range {}".format(bins))
-print ("frequency {}".format(counts))
+def plot_histogram(data, bins, range):
+    counts, bins = np.histogram(data, bins=bins, range=range)
+    print("range {}".format(bins))
+    print("frequency {}".format(counts))
+    
+    labels, values = zip(*collections.Counter(data).items())
+    indexes = np.arange(len(labels))
 
-labels, values = zip(*collections.Counter(timestamps).items())
-indexes = numpy.arange(len(labels))
-width=1
+    plt.bar(indexes, values)
+    plt.xticks(indexes, labels)
+    plt.show()
 
-#plt.bar(indexes, values, width)
-plt.bar(indexes, values)
-#plt.xticks(indexes+width*0.5, labels)
-plt.xticks(indexes, labels)
-plt.show()
+def plot_bar(timestamps, mtu):
+    plt.bar(timestamps, mtu)
+    plt.xlabel('time')
+    plt.ylabel('count')
+    plt.show()
 
+# Read packets
+timestamps, mtu = read_packets('/home/ezpedvi/packets')
 
+# Print lengths
+print("length of timestamps {}".format(len(timestamps)))
+print("length of mtus {}".format(len(mtu)))
 
-'''
-#print timestamps
-plt.bar(timestamps,len(mtu))
-plt.xlabel('time')
-plt.ylabel('count')
-plt.show()
-plt.savefig('plot.png')
-'''
+# Count packets per hour
+print(collections.Counter(timestamps))
+
+# Plot histogram
+plot_histogram(mtu, bins=10, range=(1500, 6500))
+
+# Plot bar chart
+plot_bar(timestamps, mtu)
