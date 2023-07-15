@@ -17,7 +17,7 @@ def close_ssh_connection(ssh):
     ssh.close()
 
 def fetch_files():
-    ssh = establish_ssh_connection('134.138.212.12', 'ezpedvi', '9505100403@usha')
+    ssh = establish_ssh_connection('134.138.212.12', 'ezpedvi', 'xxxxx')
     chan = ssh.invoke_shell()
 
     for i in range(0, 5000):
