@@ -33,7 +33,7 @@ def fetch_files():
             resp = execute_command(chan, "", 0)
             print(resp)
             if "password:" in resp:
-                execute_command(chan, "9505100403@usha")
+                execute_command(chan, "xxxxxx")
             if "SC-1:" in resp:
                 break
         execute_command(chan, "exit", 3)
